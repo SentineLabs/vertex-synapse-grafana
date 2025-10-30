@@ -29,3 +29,5 @@ coverage/
 
 # Plugin specific
 plugin.json.bak
+tmp/
+vertex-synapse-datasource.zip

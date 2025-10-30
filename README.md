@@ -9,7 +9,33 @@ Query [Vertex Synapse](https://synapse.docs.vertex.link/) hypergraph data using 
 - Automatic Grafana time range injection as Storm variables
 - Support for essential Storm data types: nodes, objects, lists, primitives
 
-## Quick Start
+## Installation
+
+### Manual Installation
+
+1. Download the latest `vertex-synapse-datasource.zip` from releases or build it:
+   ```bash
+   ./package.sh
+   ```
+
+2. Copy the zip file to your Grafana server and extract it:
+   ```bash
+   unzip vertex-synapse-datasource.zip -d /var/lib/grafana/plugins/
+   ```
+
+3. Configure Grafana to allow unsigned plugins by setting the environment variable:
+   ```bash
+   GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vertex-synapse-datasource
+   ```
+
+4. Restart Grafana:
+   ```bash
+   sudo systemctl restart grafana-server
+   ```
+
+5. Configure the datasource in Grafana with your Synapse API endpoint and API key
+
+### Quick Start with Docker
 
 ```bash
 # Start Cortex and Grafana
@@ -61,14 +87,3 @@ Automatically injected from Grafana time picker:
 - `$timeFrom`, `$timeTo` - ISO 8601 strings
 - `$dateFrom`, `$dateTo` - Date strings (YYYY-MM-DD)
 - `$timeFromMs`, `$timeToMs` - Unix milliseconds
-
-## Development
-
-```bash
-# Frontend
-npm install
-npm run build
-
-# Backend  
-go build -o dist/gpx_vertex-synapse-datasource_$(go env GOOS)_$(go env GOARCH) ./pkg
-```
