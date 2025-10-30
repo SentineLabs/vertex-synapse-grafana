@@ -1,0 +1,57 @@
+{
+  "type": "datasource",
+  "name": "Vertex Synapse",
+  "id": "vertex-synapse-datasource",
+  "metrics": true,
+  "logs": true,
+  "annotations": true,
+  "alerting": true,
+  "backend": true,
+  "executable": "gpx_vertex-synapse-datasource",
+  "info": {
+    "description": "Grafana datasource plugin for Vertex Synapse",
+    "author": {
+      "name": "Tomas Gatial",
+      "email": "tomas.gatial@sentinleone.com"
+    },
+    "keywords": ["vertex", "synapse", "datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/sentinlone/vertex-synapse-grafana"
+      }
+    ],
+    "screenshots": [],
+    "version": "1.0.0",
+    "updated": "2025-10-30"
+  },
+  "includes": [
+    {
+      "type": "datasource",
+      "name": "Vertex Synapse"
+    },
+    {
+      "type": "dashboard",
+      "name": "Synapse Demo",
+      "path": "dashboards/synapse-demo.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "Synapse Views/Users",
+      "path": "dashboards/synapse-views-users.json"
+    },
+    {
+      "type": "dashboard",
+      "name": "Synapse Metrics Edits",
+      "path": "dashboards/synapse-metrics-edits.json"
+    }
+  ],
+  "dependencies": {
+    "grafanaDependency": ">=8.0.0",
+    "plugins": []
+  }
+}

@@ -1,0 +1,97 @@
+
+services:
+  grafana:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=vertex-synapse-datasource
+      - GF_LOG_LEVEL=debug
+    volumes:
+      - grafana-storage:/var/lib/grafana/data
+    networks:
+      - grafana-network
+    restart: unless-stopped
+    depends_on:
+      cortex:
+        condition: service_healthy
+
+  # Vertex Synapse Cortex
+  cortex:
+    platform: linux/amd64
+    image: vertexproject/synapse:v2.210.0
+    command: ["python", "-m", "synapse.servers.cortex", "--telepath", "tcp://0.0.0.0:27493", "--name", "cortex", "/vertex/storage"]
+    environment:
+      - SYN_CORTEX_AUTH_PASSWD=secret
+      - SYN_CORTEX_HTTPS_PORT=8443
+      - SYN_CORTEX_HOST=0.0.0.0
+      - SYN_CORTEX_HEALTH_SYSCTL_CHECKS=false
+    volumes:
+      - cortex-data:/vertex/storage
+    networks:
+      - grafana-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-m", "synapse.tools.healthcheck", "-c", "cell:///vertex/storage/"]
+      interval: 5s
+      timeout: 4s
+      retries: 3
+      start_period: 3s
+
+  # Load sample data into Cortex
+  load-data:
+    platform: linux/amd64
+    image: vertexproject/synapse:v2.210.0
+    entrypoint: []
+    command: ["sh", "-c", "cat /data/sample-data.storm | python -m synapse.tools.storm tcp://root:secret@cortex:27493"]
+    volumes:
+      - ./sample-data.storm:/data/sample-data.storm:ro
+    networks:
+      - grafana-network
+    depends_on:
+      cortex:
+        condition: service_healthy
+    profiles:
+      - tools
+
+  # Create Grafana API key
+  create-apikey:
+    platform: linux/amd64
+    image: vertexproject/synapse:v2.210.0
+    entrypoint: []
+    command: ["sh", "-c", "python -m synapse.tools.storm tcp://root:secret@cortex:27493 -q 'auth.user.add grafana --admin $lib.true | return($lib.auth.users.byname(grafana).pack().apikey)'"]
+    networks:
+      - grafana-network
+    depends_on:
+      cortex:
+        condition: service_healthy
+    profiles:
+      - tools
+
+  # Interactive Storm shell
+  storm:
+    platform: linux/amd64
+    image: vertexproject/synapse:v2.210.0
+    entrypoint: []
+    command: ["python", "-m", "synapse.tools.storm", "tcp://root:secret@cortex:27493"]
+    networks:
+      - grafana-network
+    depends_on:
+      cortex:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+    profiles:
+      - tools
+
+
+volumes:
+  grafana-storage:
+  cortex-data:
+
+networks:
+  grafana-network:
+    driver: bridge
