@@ -1,6 +1,6 @@
 # Vertex Synapse Datasource for Grafana
 
-Query [Vertex Synapse](https://synapse.docs.vertex.link/) hypergraph data using Storm queries in Grafana.
+Query [Vertex Synapse](https://vertex.link/synapse) hypergraph data using Storm queries in Grafana.
 
 ## Features
 
@@ -30,19 +30,18 @@ Query [Vertex Synapse](https://synapse.docs.vertex.link/) hypergraph data using 
 
 4. Restart Grafana:
    ```bash
+   # For systemd
    sudo systemctl restart grafana-server
+   
+   # For init.d
+   sudo service grafana-server restart
    ```
 
-5. Configure the datasource in Grafana with your Synapse API endpoint and API key
-
-### Quick Start with Docker
+### Docker Compose (Development)
 
 ```bash
-# Start Cortex and Grafana
+# Start services
 docker compose up -d
-
-# Load sample data into Cortex
-docker compose run --rm load-data
 
 # Create Grafana API user and get API key
 docker compose run --rm create-apikey
@@ -51,19 +50,21 @@ docker compose run --rm create-apikey
 # Configure datasource with the API key from above
 ```
 
-### Interactive Storm Shell
+## Configuration
 
-```bash
-# Open interactive Storm shell
-docker compose run --rm storm
+1. In Grafana, go to Configuration > Data Sources
+2. Click "Add data source"
+3. Search for "Vertex Synapse" and select it
+4. Configure the following settings:
+   - **Name**: A name for your data source
+   - **URL**: The URL of your Vertex Synapse API (e.g., `http://synapse:4443`)
+   - **API Key**: Your Synapse API key (recommended: use Grafana secrets)
 
-# In the Storm shell, you can run queries:
-storm> inet:fqdn
-storm> inet:ipv4 +#malware
-storm> $lib.view.list()
-```
+## Usage
 
-## Query Examples
+### Query Editor
+
+Use the query editor to write and execute Storm queries:
 
 ```storm
 # Basic queries
@@ -79,7 +80,7 @@ return($lib.view.list())            # Return view list
 return(({'key': 'value'}))          # Return object
 ```
 
-## Time Variables
+### Time Variables
 
 Automatically injected from Grafana time picker:
 
@@ -87,3 +88,8 @@ Automatically injected from Grafana time picker:
 - `$timeFrom`, `$timeTo` - ISO 8601 strings
 - `$dateFrom`, `$dateTo` - Date strings (YYYY-MM-DD)
 - `$timeFromMs`, `$timeToMs` - Unix milliseconds
+
+## Additional Resources
+
+- [Synapse Documentation](https://synapse.docs.vertex.link/) - Official Synapse documentation
+- [Vertex Synapse Grafana Plugin](https://github.com/sentinelabs/vertex-synapse-grafana) - Source code and issue tracking

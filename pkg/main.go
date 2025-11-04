@@ -5,7 +5,7 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/grafana/vertex-synapse-datasource/pkg/plugin"
+	"github.com/sentinelabs/vertex-synapse-grafana/pkg/plugin"
 )
 
 func main() {

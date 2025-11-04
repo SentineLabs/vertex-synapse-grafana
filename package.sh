@@ -18,11 +18,24 @@ docker cp vertex-synapse-grafana-grafana-1:/var/lib/grafana/plugins/vertex-synap
 # Create clean plugin directory
 echo "Creating plugin package..."
 mkdir -p tmp/package/vertex-synapse-datasource
-cp tmp/extracted/vertex-synapse-datasource/plugin.json tmp/package/vertex-synapse-datasource/
-cp tmp/extracted/vertex-synapse-datasource/README.md tmp/package/vertex-synapse-datasource/
-cp -r tmp/extracted/vertex-synapse-datasource/img tmp/package/vertex-synapse-datasource/
+
+# Copy only the necessary files from the extracted directory
+cp -r tmp/extracted/vertex-synapse-datasource/module.js* tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
+cp -r tmp/extracted/vertex-synapse-datasource/gpx_* tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
+cp -r tmp/extracted/vertex-synapse-datasource/img tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
+
+# Copy files from project root (these will override any from the extracted dir)
+cp README.md tmp/package/vertex-synapse-datasource/
+cp plugin.json tmp/package/vertex-synapse-datasource/
+cp LICENSE tmp/package/vertex-synapse-datasource/
+cp CHANGELOG.md tmp/package/vertex-synapse-datasource/
+
+# Copy screenshots if they exist
+if [ -d "src/img/screenshots" ]; then
+  mkdir -p tmp/package/vertex-synapse-datasource/img/screenshots
+  cp src/img/screenshots/*.png tmp/package/vertex-synapse-datasource/img/screenshots/ 2>/dev/null || true
+fi
 cp -r tmp/extracted/vertex-synapse-datasource/dashboards tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
-cp tmp/extracted/vertex-synapse-datasource/module.js tmp/package/vertex-synapse-datasource/
 cp tmp/extracted/vertex-synapse-datasource/module.js.map tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
 cp tmp/extracted/vertex-synapse-datasource/gpx_vertex-synapse-datasource_linux_amd64 tmp/package/vertex-synapse-datasource/
 cp tmp/extracted/vertex-synapse-datasource/gpx_vertex-synapse-datasource_linux_arm64 tmp/package/vertex-synapse-datasource/

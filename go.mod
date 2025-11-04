@@ -1,4 +1,4 @@
-module github.com/grafana/vertex-synapse-datasource
+module github.com/sentinelabs/vertex-synapse-grafana
 
 go 1.21
 

@@ -12,7 +12,7 @@
     "description": "Grafana datasource plugin for Vertex Synapse",
     "author": {
       "name": "Tomas Gatial",
-      "email": "tomas.gatial@sentinleone.com"
+      "email": "tomas.gatial@sentinelone.com"
     },
     "keywords": ["vertex", "synapse", "datasource"],
     "logos": {
@@ -22,10 +22,23 @@
     "links": [
       {
         "name": "GitHub",
-        "url": "https://github.com/sentinlone/vertex-synapse-grafana"
+        "url": "https://github.com/sentinelabs/vertex-synapse-grafana"
+      },
+      {
+        "name": "Documentation",
+        "url": "https://github.com/sentinelabs/vertex-synapse-grafana#readme"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "screenshot",
+        "path": "img/screenshots/query1.png"
+      },
+      {
+        "name": "screenshot",
+        "path": "img/screenshots/query2.png"
+      }
+    ],
     "version": "1.0.0",
     "updated": "2025-10-30"
   },
