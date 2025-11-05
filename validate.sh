@@ -1,0 +1,1 @@
+docker run --platform=linux/amd64 --pull=always -v ./vertex-synapse-datasource.zip:/vertex-synapse-datasource.zip grafana/plugin-validator-cli /vertex-synapse-datasource.zip
