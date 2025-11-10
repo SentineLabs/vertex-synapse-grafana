@@ -35,6 +35,13 @@ if [ -d "src/img/screenshots" ]; then
   mkdir -p tmp/package/vertex-synapse-datasource/img/screenshots
   cp src/img/screenshots/*.png tmp/package/vertex-synapse-datasource/img/screenshots/ 2>/dev/null || true
 fi
+
+# Copy dashboards from source
+if [ -d "src/dashboards" ]; then
+  mkdir -p tmp/package/vertex-synapse-datasource/dashboards
+  cp src/dashboards/*.json tmp/package/vertex-synapse-datasource/dashboards/ 2>/dev/null || true
+fi
+
 cp -r tmp/extracted/vertex-synapse-datasource/dashboards tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
 cp tmp/extracted/vertex-synapse-datasource/module.js.map tmp/package/vertex-synapse-datasource/ 2>/dev/null || true
 cp tmp/extracted/vertex-synapse-datasource/gpx_vertex-synapse-datasource_linux_amd64 tmp/package/vertex-synapse-datasource/
